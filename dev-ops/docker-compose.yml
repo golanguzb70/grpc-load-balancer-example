@@ -1,0 +1,38 @@
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:1.27.0
+    ports:
+      - "9099:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - post_service
+
+  server1:
+    container_name: server1
+    build:
+      context: ../server
+      dockerfile: Dockerfile
+    networks:
+      - post_service
+    environment:
+      - GRPC_PORT=80
+    ports:
+      - "50051:80"
+
+  server2:
+    container_name: server2
+    build:
+      context: ../server
+      dockerfile: Dockerfile
+    networks:
+      - post_service
+    environment:
+      - GRPC_PORT=80
+    ports:
+      - "50052:80"
+
+networks:
+  post_service:
+    driver: bridge
