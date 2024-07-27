@@ -14,7 +14,7 @@ type ServiceManager interface {
 }
 
 type client struct {
-	postService post_service.PostServiceClient
+	conn *grpc.ClientConn
 }
 
 func New(cfg *config.Config) (ServiceManager, error) {
@@ -27,10 +27,10 @@ func New(cfg *config.Config) (ServiceManager, error) {
 	}
 
 	return &client{
-		postService: post_service.NewPostServiceClient(postServiceConn),
+		conn: postServiceConn,
 	}, nil
 }
 
 func (c *client) PostService() post_service.PostServiceClient {
-	return c.postService
+	return post_service.NewPostServiceClient(c.conn)
 }
