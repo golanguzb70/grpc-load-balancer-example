@@ -67,6 +67,20 @@ services:
     ports:
       - "5051:80"
 
+  api-gateway-client-lb: 
+    container_name: api-gateway-client-lb
+    build:
+      context: ../api-gateway-client-lb
+      dockerfile: Dockerfile
+    networks:
+      - post_service
+    environment:
+      - HTTP_PORT=80
+      - POST_SERVICE_HOST=nginx
+      - POST_SERVICE_PORT=80
+    ports:
+      - "5052:80"
+
 networks:
   post_service:
     driver: bridge

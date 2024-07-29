@@ -1,0 +1,224 @@
+definitions:
+  models.Response:
+    properties:
+      messages:
+        type: string
+    type: object
+  post_service.CreateRequest:
+    properties:
+      body:
+        type: string
+      id:
+        type: string
+      owner_id:
+        type: string
+      slug:
+        type: string
+      title:
+        type: string
+    type: object
+  post_service.Post:
+    properties:
+      body:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: string
+      owner_id:
+        type: string
+      slug:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  post_service.Posts:
+    properties:
+      count:
+        type: integer
+      items:
+        items:
+          $ref: '#/definitions/post_service.Post'
+        type: array
+    type: object
+  post_service.UpdateRequest:
+    properties:
+      body:
+        type: string
+      id:
+        type: string
+      slug:
+        type: string
+      title:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a Post CRUD API Gateway server.
+  title: Post CRUD API Gateway v1
+  version: "1.0"
+paths:
+  /post:
+    get:
+      consumes:
+      - application/json
+      description: API for get list a of posts
+      parameters:
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: search
+        type: string
+      - in: query
+        name: sort_asc
+        type: boolean
+      - description: search
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post_service.Posts'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      security:
+      - BearerAuth: []
+      summary: Post List
+      tags:
+      - post
+    post:
+      consumes:
+      - application/json
+      description: API for create Post, `Authorization` required
+      parameters:
+      - description: post
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/post_service.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post_service.Post'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Response'
+      security:
+      - BearerAuth: []
+      summary: post Endpoint
+      tags:
+      - post
+  /post/{key}:
+    delete:
+      consumes:
+      - application/json
+      description: API for delete post with id, `Authorization` required
+      parameters:
+      - description: key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Response'
+      security:
+      - BearerAuth: []
+      summary: post Endpoint
+      tags:
+      - post
+    get:
+      consumes:
+      - application/json
+      description: API for get post with id, `Authorization` required
+      parameters:
+      - description: key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post_service.Post'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Response'
+      security:
+      - BearerAuth: []
+      summary: post Endpoint
+      tags:
+      - post
+    put:
+      consumes:
+      - application/json
+      description: API for update post, `Authorization` required
+      parameters:
+      - description: key
+        in: path
+        name: key
+        required: true
+        type: string
+      - description: post
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/post_service.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/post_service.Post'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Response'
+      security:
+      - BearerAuth: []
+      summary: post Endpoint
+      tags:
+      - post
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

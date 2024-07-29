@@ -9,7 +9,6 @@
      - Make sure your are continuously meeting the performance standards as you make changes to your system
 
      Can be used to simulate a normal day in you business
-
  */
 import http from 'k6/http'
 import { check, sleep } from "k6";
@@ -29,7 +28,7 @@ export let options = {
 };
 
 export default () => {
-    const res = http.get('http://localhost:5050/post?limit=11&page=1&sort_asc=true')
+    const res = http.get('http://localhost:5052/post?limit=11&page=1&sort_asc=true')
     check(res, { "status was 200": (r) => r.status == 200 })
     sleep(1); // this is interval that each vus send request
 };
